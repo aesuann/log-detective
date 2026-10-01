@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class ServiceAClient {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private static final String SERVICE_A_URL = "http://localhost:8080/tasks";
+    private static final String SERVICE_A_URL = "http://service-a:8080/tasks";
 
     public List<Task> getAllTasksFromServiceA() {
         Task[] tasks = restTemplate.getForObject(SERVICE_A_URL, Task[].class);
