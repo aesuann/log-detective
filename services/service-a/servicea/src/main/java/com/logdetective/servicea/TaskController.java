@@ -1,5 +1,7 @@
 package com.logdetective.servicea;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -8,17 +10,26 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequestMapping("/tasks")
 public class TaskController {
 
+    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+
     private final Map<Long, Task> tasks = new HashMap<>();
     private final AtomicLong idCounter = new AtomicLong();
 
     @GetMapping
     public Collection<Task> getAllTasks() {
+        logger.info("Fetching all tasks, count={}", tasks.size());
         return tasks.values();
     }
 
     @GetMapping("/{id}")
     public Task getTask(@PathVariable Long id) {
-        return tasks.get(id);
+        Task task = tasks.get(id);
+        if (task == null) {
+            logger.warn("Task not found, id={}", id);
+        } else {
+            logger.info("Fetched task, id={}", id);
+        }
+        return task;
     }
 
     @PostMapping
@@ -26,6 +37,7 @@ public class TaskController {
         long id = idCounter.incrementAndGet();
         task.setId(id);
         tasks.put(id, task);
+        logger.info("Created task, id={}, title={}", id, task.getTitle());
         return task;
     }
 }
