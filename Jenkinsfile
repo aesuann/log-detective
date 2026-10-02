@@ -23,10 +23,7 @@ pipeline {
         stage('Docker Build Service A') {
             steps {
                 dir('services/service-a/servicea') {
-                    sh '''
-                        eval $(minikube docker-env)
-                        DOCKER_BUILDKIT=0 docker build -t service-a:latest .
-                    '''
+                    sh 'DOCKER_BUILDKIT=0 docker build -t service-a:latest .'
                 }
             }
         }
@@ -34,21 +31,8 @@ pipeline {
         stage('Docker Build Service B') {
             steps {
                 dir('services/service-b/serviceb') {
-                    sh '''
-                        eval $(minikube docker-env)
-                        DOCKER_BUILDKIT=0 docker build -t service-b:latest .
-                    '''
+                    sh 'DOCKER_BUILDKIT=0 docker build -t service-b:latest .'
                 }
-            }
-        }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                sh '''
-                    kubectl apply -f k8s/service-a-deployment.yaml
-                    kubectl apply -f k8s/service-b-configmap.yaml
-                    kubectl apply -f k8s/service-b-deployment.yaml
-                '''
             }
         }
 
@@ -67,7 +51,7 @@ pipeline {
             echo '[STATUS] All stages passed'
         }
         failure {
-            echo '[STATUS] Pipeline FAILED'
+            echo '[STATUS] Pipeline FAILED.'
         }
     }
 }
