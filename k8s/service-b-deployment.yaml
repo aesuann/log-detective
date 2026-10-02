@@ -18,6 +18,12 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 8081
+          env:
+            - name: SERVICE_A_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: service-b-config
+                  key: SERVICE_A_URL
 ---
 apiVersion: v1
 kind: Service
