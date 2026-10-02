@@ -20,6 +20,14 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                dir('services/service-a/servicea') {
+                    sh './mvnw test'
+                }
+            }
+        }
+
         stage('Docker Build Service A') {
             steps {
                 dir('services/service-a/servicea') {
@@ -33,12 +41,6 @@ pipeline {
                 dir('services/service-b/serviceb') {
                     sh 'DOCKER_BUILDKIT=0 docker build -t service-b:latest .'
                 }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo '[TEST] no unit tests configured yet'
             }
         }
     }
