@@ -1,54 +1,47 @@
-cd ~/github/log-detective
-cat > Jenkinsfile << 'EOF'
 pipeline {
     agent any
 
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking code out'
+                echo '[GIT] Cloning log-detective repo'
             }
         }
 
         stage('Build Service A') {
             steps {
-                echo 'Building Service A...'
+                echo '[MAVEN] Packaging service-a (JDK 17, skipTests)'
                 dir('services/service-a/servicea') {
-                    sh './mvnw clean package -DskipTests'
+                    sh './mvnw clean package -DskipTests -q'
                 }
             }
         }
 
         stage('Build Service B') {
             steps {
-                echo 'Building Service B'
+                echo '[MAVEN] Packaging service-b (JDK 17, skipTests)'
                 dir('services/service-b/serviceb') {
-                    sh './mvnw clean package -DskipTests'
+                    sh './mvnw clean package -DskipTests -q'
                 }
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing services'
-                // Пока тестов нет, просто заглушка
-                // В будущем здесь будут:
-                // dir('services/service-a/servicea') { sh './mvnw test' }
-                // dir('services/service-b/serviceb') { sh './mvnw test' }
+                echo '[TEST] no unit tests configured yet'
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline completed'
+            echo '[PIPELINE] Execution finished'
         }
         success {
-            echo 'All stages passed'
+            echo '[STATUS] All stages passed'
         }
         failure {
-            echo ' Pipeline failed'
+            echo '[STATUS] Pipeline FAILED.'
         }
     }
 }
-EOF
