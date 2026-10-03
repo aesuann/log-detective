@@ -17,7 +17,7 @@ public class TaskController {
 
     @GetMapping
     public Collection<Task> getAllTasks() {
-        logger.info("Fetching all tasks, count={}", tasks.size());
+        logger.info("Fetching tasks, count={}", tasks.size());
         return tasks.values();
     }
 
@@ -25,7 +25,7 @@ public class TaskController {
     public Task getTask(@PathVariable Long id) {
         Task task = tasks.get(id);
         if (task == null) {
-            logger.warn("Task not found, id={}", id);
+            logger.warn("Task not found: {}", id);
         } else {
             logger.info("Fetched task, id={}", id);
         }
@@ -37,7 +37,7 @@ public class TaskController {
         long id = idCounter.incrementAndGet();
         task.setId(id);
         tasks.put(id, task);
-        logger.info("Created task, id={}, title={}", id, task.getTitle());
+        logger.info("Created task {}", id, task.getTitle());
         return task;
     }
 }
