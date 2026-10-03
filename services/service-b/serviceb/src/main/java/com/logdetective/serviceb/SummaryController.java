@@ -18,7 +18,13 @@ public class SummaryController {
 
     @GetMapping
     public List<Task> getSummary() {
-        logger.info("Fetching task summary from service-a");
+        logger.info("Fetching summary from service-a");
         return serviceAClient.getAllTasksFromServiceA();
+    }
+
+    @GetMapping("/detailed-report")
+    public String getDetailedReport() {
+        logger.info("Requesting detailed report");
+        return serviceAClient.fetchDetailedReport();
     }
 }
